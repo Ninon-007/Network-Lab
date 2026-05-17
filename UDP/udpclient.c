@@ -13,10 +13,8 @@ int main()
     struct sockaddr_in server;
     socklen_t len = sizeof(server);
 
-    // Create socket
     sockfd = socket(AF_INET, SOCK_DGRAM, 0);
 
-    // Server details
     server.sin_family = AF_INET;
     server.sin_port = htons(PORT);
     inet_pton(AF_INET, "127.0.0.1", &server.sin_addr);
@@ -28,10 +26,13 @@ int main()
         printf("Client: ");
         fgets(buffer, sizeof(buffer), stdin);
 
-        sendto(sockfd, buffer, strlen(buffer), 0,
+        // Remove newline
+        buffer[strcspn(buffer, "\n")] = 0;
+
+        sendto(sockfd, buffer, strlen(buffer)+1, 0,
               (struct sockaddr*)&server, len);
 
-        if(strncmp(buffer, "exit", 4) == 0)
+        if(strcmp(buffer, "exit") == 0)
             break;
 
         recvfrom(sockfd, buffer, sizeof(buffer), 0,
@@ -39,7 +40,7 @@ int main()
 
         printf("Server: %s\n", buffer);
 
-        if(strncmp(buffer, "exit", 4) == 0)
+        if(strcmp(buffer, "exit") == 0)
             break;
     }
 
