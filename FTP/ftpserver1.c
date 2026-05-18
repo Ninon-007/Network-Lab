@@ -54,9 +54,10 @@ int main()
         {
             send(newsock,buff,sizeof(buff),0);
         }
-
+        
+        fclose(fp);        
     }
-    fclose(fp);
+    
     close(newsock);
     close(sockfd);
 
