@@ -12,10 +12,8 @@
 int main()
 {
     int sockfd, bytes;
-
     char packet[1024];
     char buffer[1024];
-
     struct sockaddr_in address;
     struct timeval tv;
 
@@ -29,7 +27,6 @@ int main()
 
     address.sin_family = AF_INET;
     address.sin_port = htons(PORT);
-
     inet_pton(AF_INET,"127.0.0.1",&address.sin_addr);
 
     connect(sockfd,(struct sockaddr*)&address,sizeof(address));
@@ -54,7 +51,6 @@ int main()
         }
 
         memset(buffer, 0, sizeof(buffer));
-
         bytes = read(sockfd,buffer,sizeof(buffer));
 
         if(bytes > 0 && strncmp(buffer, "ACK", 3) == 0)
@@ -66,13 +62,9 @@ int main()
         {
             printf("Timeout...\n");
             printf("Retransmitting packet %s",packet);
-
             send(sockfd,packet, sizeof(packet), 0);
-
             memset(buffer, 0, sizeof(buffer));
-
             read(sockfd, buffer, sizeof(buffer));
-
             printf("ACK received after retransmission\n");
         }
     }

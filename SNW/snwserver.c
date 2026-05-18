@@ -12,9 +12,7 @@
 int main()
 {
     int sockfd, newsock, bytes;
-
     char buffer[1024];
-
     struct sockaddr_in address;
     socklen_t addrlen = sizeof(address);
 
@@ -34,23 +32,17 @@ int main()
     address.sin_port = htons(PORT);
     address.sin_addr.s_addr = INADDR_ANY;
 
-    bind(sockfd,
-         (struct sockaddr*)&address, sizeof(address));
-
+    bind(sockfd, (struct sockaddr*)&address, sizeof(address));
     listen(sockfd, 3);
 
     printf("Server waiting...\n");
-
     newsock = accept(sockfd,(struct sockaddr*)&address, &addrlen);
-
     printf("Client connected...\n");
 
     while(1)
     {
         memset(buffer, 0, sizeof(buffer));
-
         bytes = read(newsock,buffer,sizeof(buffer));
-
         if(bytes <= 0)
         {
             break;
@@ -62,13 +54,11 @@ int main()
             break;
         }
 
-        printf("Packet received: %s",
-               buffer);
+        printf("Packet received: %s", buffer);
 
         if(rand()%100 < ackprob)
         {
             printf("ACK sent\n");
-
             send(newsock, "ACK", sizeof("ACK"), 0);
         }
 
